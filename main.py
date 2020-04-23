@@ -72,7 +72,7 @@ window.title("Spectral Bandwise Display") #title
 labelTitle = tkinter.Label(window, text="Spectral Image", font=("Helvetica", 16)) #label
 labelTitle.grid(row=1, column=1)
 
-window.geometry("500x200") #window size
+window.geometry("1000x300") #window size
 
 
 #View Raw Image-----------------------------------------------------
@@ -81,14 +81,14 @@ window.geometry("500x200") #window size
 labelRead = Label (window, text="View raw image ", font=("Arial", 10))
 labelRead.grid(row=2, column=1)
 
-#butto creation
+#button creation
 #action for buttonFirst
 def clicked():
     # Specim IQ
     spatial_pixels = 512
     sample_lines = 512
     spectral_bands = 204
-    open_path = r'F:\PHD\UEF Thesis\Dimitry\SPECTRAL IMAGES\Specim IQ\moss\capture\2018-09-20_004.raw'
+    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
     fopen = open(open_path, "rb")
     u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
     print(u.shape)
@@ -104,6 +104,8 @@ buttonRead.grid(row=2, column=2)
 #View Raw Image Done!-------------------------------------------------------
 
 #Crop Image----------------------------------------------------------
+#Example value= 150,350,150,350
+
 #labelCrop
 labelCrop = Label (window, text="Crop Image ", font=("Arial", 10))
 labelCrop.grid(row=3, column=1)
@@ -143,7 +145,7 @@ def clickedCrop():
     spatial_pixels = 512
     sample_lines = 512
     spectral_bands = 204
-    open_path = r'F:\PHD\UEF Thesis\Dimitry\SPECTRAL IMAGES\Specim IQ\moss\capture\2018-09-20_004.raw'
+    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
     fopen = open(open_path, "rb")
     u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
     print(u.shape)
@@ -184,7 +186,7 @@ def clickedBand():
     spatial_pixels = 512
     sample_lines = 512
     spectral_bands = 204
-    open_path = r'F:\PHD\UEF Thesis\Dimitry\SPECTRAL IMAGES\Specim IQ\moss\capture\2018-09-20_004.raw'
+    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
     fopen = open(open_path, "rb")
     u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
     print(u.shape)
@@ -213,6 +215,92 @@ buttonNext.grid(row=4, column=5)
 
 #View bandwise done----------------------------------------------------------
 
+#Find Contrast----------------------------------------------------------
+#labeLContrast
+labelContrast = Label (window, text="Contrast Graph ", font=("Arial", 10))
+labelContrast.grid(row=5, column=1)
 
+#labeLWhiteX1
+labelWhiteX1 = Label (window, text="White Reference X1", font=("Arial", 10))
+labelWhiteX1.grid(row=5, column=2)
+
+#textboxWhiteX1
+txtboxWhiteX1 = Entry(window,width=10)
+txtboxWhiteX1.grid(row=5, column=3)
+
+#labeLWhiteX2
+labelWhiteX2 = Label (window, text="White Reference X2", font=("Arial", 10))
+labelWhiteX2.grid(row=5, column=4)
+
+#textboxWhiteX2
+txtboxWhiteX2 = Entry(window,width=10)
+txtboxWhiteX2.grid(row=5, column=5)
+
+#labeLDarkX1
+labelDarkX1 = Label (window, text="Dark Reference X1", font=("Arial", 10))
+labelDarkX1.grid(row=5, column=6)
+
+#textboxDarkX1
+txtboxDarkX1 = Entry(window,width=10)
+txtboxDarkX1.grid(row=5, column=7)
+
+#labeLDarkX2
+labelDarkX2 = Label (window, text="Dark Reference X2", font=("Arial", 10))
+labelDarkX2.grid(row=5, column=8)
+
+#textboxDarkX2
+txtboxDarkX2 = Entry(window,width=10)
+txtboxDarkX2.grid(row=5, column=9)
+
+#action for Plotting
+def clickedPlot():
+    # Specim IQ
+    spatial_pixels = 512
+    sample_lines = 512
+    spectral_bands = 204
+    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
+    fopen = open(open_path, "rb")
+    u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+    print(u.shape)
+    print(spatial_pixels * sample_lines * spectral_bands)
+    u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+    print(u1.shape)
+    #converting float(otherwise it wasnt plotting, may be because of unint16)
+    u1 = u1/100
+
+    #getting data from textbox
+    StringWhiteX1 = txtboxWhiteX1.get()
+    WhiteX1 = int(StringWhiteX1)
+
+    StringWhiteX2 = txtboxWhiteX2.get()
+    WhiteX2 = int(StringWhiteX2)
+
+    StringDarkX1 = txtboxDarkX1.get()
+    DarkX1 = int(StringDarkX1)
+
+    StringDarkX2 = txtboxDarkX2.get()
+    DarkX2 = int(StringDarkX2)
+
+    #plotting
+    white = u1[WhiteX1,:,WhiteX2]
+    dark = u1[DarkX1,:,DarkX2]
+    contrast = white/dark
+
+    plt.plot(white, 'r')
+    plt.plot(dark, 'r')
+    plt.plot(contrast, 'b')
+
+    plt.show()
+
+
+
+
+#buttonPlot
+buttonPlot = Button (window, text="Plot", command=clickedPlot)
+buttonPlot.grid(row=5, column=10)
+
+
+#-------------------------------------------------------------------------------
+#end
 window.mainloop() #execute gui
 
