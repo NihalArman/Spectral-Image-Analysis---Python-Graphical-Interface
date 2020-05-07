@@ -72,8 +72,21 @@ window.title("Spectral Bandwise Display") #title
 labelTitle = tkinter.Label(window, text="Spectral Image", font=("Helvetica", 16)) #label
 labelTitle.grid(row=1, column=1)
 
-window.geometry("1000x300") #window size
+window.geometry("1200x300") #window size
 
+#main code--------------------------------------
+# Specim IQ
+spatial_pixels = 512
+sample_lines = 512
+spectral_bands = 204
+open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
+fopen = open(open_path, "rb")
+u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+print(u.shape)
+print(spatial_pixels*sample_lines*spectral_bands)
+u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+print(u1.shape)
+#main code DONE------------------------------------
 
 #View Raw Image-----------------------------------------------------
 
@@ -83,24 +96,32 @@ labelRead.grid(row=2, column=1)
 
 #button creation
 #action for buttonFirst
-def clicked():
-    # Specim IQ
-    spatial_pixels = 512
-    sample_lines = 512
-    spectral_bands = 204
-    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
-    fopen = open(open_path, "rb")
-    u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
-    print(u.shape)
-    print(spatial_pixels*sample_lines*spectral_bands)
-    u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
-    print(u1.shape)
+def clickedRead():
+    # # Specim IQ
+    # spatial_pixels = 512
+    # sample_lines = 512
+    # spectral_bands = 204
+    # open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
+    # fopen = open(open_path, "rb")
+    # u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+    # print(u.shape)
+    # print(spatial_pixels*sample_lines*spectral_bands)
+    # u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+    # print(u1.shape)
     plt.imshow(u1[:,160,:], cmap="gray")
     plt.show()
 
+def clickedSave():
+    plt.imsave('test.png', u1[:, 160, :], cmap="gray")
+
 #buttonRead
-buttonRead = Button (window, text="Enter", command=clicked)
+buttonRead = Button (window, text="Enter", command=clickedRead)
 buttonRead.grid(row=2, column=2)
+
+#buttonSave
+buttonSave = Button (window, text="Save", command=clickedSave)
+buttonSave.grid(row=2, column=3)
+
 #View Raw Image Done!-------------------------------------------------------
 
 #Crop Image----------------------------------------------------------
@@ -142,16 +163,16 @@ def clickedCrop():
     #-------------------------------------
 
     # Specim IQ
-    spatial_pixels = 512
-    sample_lines = 512
-    spectral_bands = 204
-    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
-    fopen = open(open_path, "rb")
-    u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
-    print(u.shape)
-    print(spatial_pixels*sample_lines*spectral_bands)
-    u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
-    print(u1.shape)
+    # spatial_pixels = 512
+    # sample_lines = 512
+    # spectral_bands = 204
+    # open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
+    # fopen = open(open_path, "rb")
+    # u = numpy.fromfile(fopen, dtype=numpy.uint16) #uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+    # print(u.shape)
+    # print(spatial_pixels*sample_lines*spectral_bands)
+    # u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+    # print(u1.shape)
     plt.imshow(u1[intX1:intX2,160,intY1:intY2], cmap="gray")
     plt.show()
 
@@ -182,17 +203,17 @@ def clickedBand():
     stringBand = txtboxBand.get()
     bandNumber = int(stringBand)
 
-    # Specim IQ
-    spatial_pixels = 512
-    sample_lines = 512
-    spectral_bands = 204
-    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
-    fopen = open(open_path, "rb")
-    u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
-    print(u.shape)
-    print(spatial_pixels * sample_lines * spectral_bands)
-    u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
-    print(u1.shape)
+    # # Specim IQ
+    # spatial_pixels = 512
+    # sample_lines = 512
+    # spectral_bands = 204
+    # open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
+    # fopen = open(open_path, "rb")
+    # u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+    # print(u.shape)
+    # print(spatial_pixels * sample_lines * spectral_bands)
+    # u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+    # print(u1.shape)
     plt.imshow(u1[:, bandNumber, :], cmap="gray")
     plt.show()
 
@@ -207,7 +228,6 @@ def clickedNext():
     txtboxBand.delete(0, END)
     txtboxBand.insert(0, print)
 
-
 #buttonBand --uses new function for band
 buttonNext = Button (window, text="+10", command=clickedNext)
 buttonNext.grid(row=4, column=5)
@@ -216,6 +236,8 @@ buttonNext.grid(row=4, column=5)
 #View bandwise done----------------------------------------------------------
 
 #Find Contrast----------------------------------------------------------
+#example value 300,400,100,100
+
 #labeLContrast
 labelContrast = Label (window, text="Contrast Graph ", font=("Arial", 10))
 labelContrast.grid(row=5, column=1)
@@ -258,7 +280,7 @@ def clickedPlot():
     spatial_pixels = 512
     sample_lines = 512
     spectral_bands = 204
-    open_path = r'C:\Users\Nihal\Desktop\Pycharm\secondproject\image set\moss\capture\2018-09-20_004.raw'
+    open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
     fopen = open(open_path, "rb")
     u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
     print(u.shape)
@@ -292,15 +314,144 @@ def clickedPlot():
 
     plt.show()
 
-
-
-
 #buttonPlot
 buttonPlot = Button (window, text="Plot", command=clickedPlot)
 buttonPlot.grid(row=5, column=10)
 
+#Find Contrast done-------------------------------------------------------------------------------
 
-#-------------------------------------------------------------------------------
+
+#RGB Image-------------------------------------------------------------------------------
+#example value: 1, 61, 95
+
+#label RGB
+labelRgb = Label (window, text="Rgb Preview: ", font=("Arial", 10))
+labelRgb.grid(row=6, column=1)
+
+#labeLRedChannel
+labeLRedChannel = Label (window, text="Red Channel", font=("Arial", 10))
+labeLRedChannel.grid(row=6, column=2)
+
+#textboxRedChannel
+txtboxRedChannel = Entry(window,width=10)
+txtboxRedChannel.grid(row=6, column=3)
+
+#labelGreenChannel
+labelGreenChannel = Label (window, text="Green Channel", font=("Arial", 10))
+labelGreenChannel.grid(row=6, column=4)
+
+#textboxGreenChannel
+txtboxGreenChannel = Entry(window,width=10)
+txtboxGreenChannel.grid(row=6, column=5)
+
+#labelBlueChannel
+labelBlueChannel = Label (window, text="Blue Channel", font=("Arial", 10))
+labelBlueChannel.grid(row=6, column=6)
+
+#textboxBlueChannel
+txtboxBlueChannel = Entry(window,width=10)
+txtboxBlueChannel.grid(row=6, column=7)
+
+#action for RGB
+def clickedRGB():
+    spatial_pixels = 512
+    sample_lines = 512
+    spectral_bands = 204
+    open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
+    fopen = open(open_path, "rb")
+    u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+    print(u.shape)
+    print(spatial_pixels * sample_lines * spectral_bands)
+    u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+    print(u1.shape)
+
+    #plt.imshow(u1[:, 160, :], cmap="gray")
+
+    # getting data from textbox
+    StringRed = txtboxRedChannel.get()
+    red = int(StringRed)
+
+    StringGreen = txtboxGreenChannel.get()
+    green = int(StringGreen)
+
+    StringBlue = txtboxBlueChannel.get()
+    blue = int(StringBlue)
+
+    # RGB Preview
+    RGB = numpy.zeros((512, 512, 3))
+    RGB[:, :, 0] = u1[:, red, :]
+    RGB[:, :, 1] = u1[:, green, :]
+    RGB[:, :, 2] = u1[:, blue, :]
+
+    plt.imshow(RGB / 2000)
+    # plt.imshow(numpy.rot90(RGB, 3)/2000)
+    plt.show()
+
+#buttonRGB
+buttonRGB = Button (window, text="View RGB", command=clickedRGB)
+buttonRGB.grid(row=6, column=8)
+
+#Rotate RGB Image-------------------------------------------------------------------------------
+#example value: 1, 2, 3
+
+#label Rotate
+labelRotate = Label (window, text="Rotate: ", font=("Arial", 10))
+labelRotate.grid(row=6, column=9)
+
+#labeLRotValue
+labelRotValue = Label (window, text="Rotate value [1 to 3]", font=("Arial", 10))
+labelRotValue.grid(row=6, column=10)
+
+#textboxRotate
+txtboxRotate = Entry(window,width=10)
+txtboxRotate.grid(row=6, column=11)
+
+#action for Plotting
+def clickedRotate():
+    spatial_pixels = 512
+    sample_lines = 512
+    spectral_bands = 204
+    open_path = r'F:\PHD\UEF Thesis\image set\card photogrammetry\Green paper photogrametry spectral images set\409\capture\409.raw'
+    fopen = open(open_path, "rb")
+    u = numpy.fromfile(fopen, dtype=numpy.uint16)  # uint16 float32 #count=spatial_pixels*sample_lines*spectral_bands
+    print(u.shape)
+    print(spatial_pixels * sample_lines * spectral_bands)
+    u1 = numpy.reshape(u, (sample_lines, spectral_bands, spatial_pixels))
+    print(u1.shape)
+
+    #plt.imshow(u1[:, 160, :], cmap="gray")
+
+    #getting data from textbox
+    # getting data from textbox
+    StringRed = txtboxRedChannel.get()
+    red = int(StringRed)
+
+    StringGreen = txtboxGreenChannel.get()
+    green = int(StringGreen)
+
+    StringBlue = txtboxBlueChannel.get()
+    blue = int(StringBlue)
+
+    #rotate value from textbox
+    StringRot = txtboxRotate.get()
+    rotateText = int(StringRot)
+
+    # RGB Preview
+    RGB = numpy.zeros((512, 512, 3))
+    RGB[:, :, 0] = u1[:, red, :]
+    RGB[:, :, 1] = u1[:, green, :]
+    RGB[:, :, 2] = u1[:, blue, :]
+
+    #plt.imshow(RGB / 2000)
+    plt.imshow(numpy.rot90(RGB, rotateText)/2000)
+    plt.show()
+
+#buttonROTATE
+buttonRotate = Button (window, text="Rotate", command=clickedRotate)
+buttonRotate.grid(row=6, column=12)
+#Rotate RGB Image done-------------------------------------------------------------------------------
+
+
 #end
 window.mainloop() #execute gui
 
